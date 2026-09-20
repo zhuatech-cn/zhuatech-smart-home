@@ -1,0 +1,14 @@
+{
+  "name": "@zhuatech/smart-home",
+  "version": "1.0.0",
+  "private": true,
+  "description": "知华全屋智能与家庭物联网平台社区版",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test",
+    "check": "node --check src/domain.js && node --check src/server.js"
+  },
+  "engines": { "node": ">=20" },
+  "license": "LicenseRef-ZhuaTech-NonCommercial-1.0"
+}

@@ -1,0 +1,16 @@
+services:
+  smart-home:
+    build: .
+    ports: ["18104:18104"]
+    environment:
+      PORT: 18104
+      SMARTHOME_API_KEY: ${SMARTHOME_API_KEY:-zhuatech-demo-key}
+      SMARTHOME_DATA_FILE: /app/data/smart-home.json
+    volumes: ["smart-home-data:/app/data"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:18104/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+volumes:
+  smart-home-data:

@@ -1,0 +1,15 @@
+-- 上海如静知华信息科技有限公司 https://www.zhuatech.cn/
+-- 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+CREATE DATABASE IF NOT EXISTS zhuatech_smart_home DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE zhuatech_smart_home;
+
+CREATE TABLE home (id VARCHAR(32) PRIMARY KEY, name VARCHAR(128) NOT NULL, address VARCHAR(255) NOT NULL, timezone VARCHAR(64) NOT NULL, owner_id VARCHAR(32), status VARCHAR(24) NOT NULL, created_at DATETIME(3) NOT NULL);
+CREATE TABLE home_member (id VARCHAR(32) PRIMARY KEY, home_id VARCHAR(32) NOT NULL, name VARCHAR(64) NOT NULL, mobile VARCHAR(32) NOT NULL, member_role VARCHAR(24) NOT NULL, status VARCHAR(24) NOT NULL, expires_at DATETIME(3), created_at DATETIME(3) NOT NULL, UNIQUE KEY uk_home_mobile(home_id,mobile));
+CREATE TABLE room (id VARCHAR(32) PRIMARY KEY, home_id VARCHAR(32) NOT NULL, name VARCHAR(64) NOT NULL, floor VARCHAR(32), room_type VARCHAR(32), sort_no INT NOT NULL DEFAULT 0, created_at DATETIME(3) NOT NULL);
+CREATE TABLE device (id VARCHAR(32) PRIMARY KEY, home_id VARCHAR(32) NOT NULL, room_id VARCHAR(32) NOT NULL, serial_no VARCHAR(128) NOT NULL UNIQUE, name VARCHAR(128) NOT NULL, category VARCHAR(64) NOT NULL, protocol VARCHAR(32) NOT NULL, capabilities JSON NOT NULL, device_state JSON NOT NULL, firmware_version VARCHAR(32), last_seen_at DATETIME(3), created_at DATETIME(3) NOT NULL, INDEX idx_device_home_room(home_id,room_id));
+CREATE TABLE scene (id VARCHAR(32) PRIMARY KEY, home_id VARCHAR(32) NOT NULL, name VARCHAR(128) NOT NULL, icon VARCHAR(32), actions JSON NOT NULL, enabled BOOLEAN NOT NULL, executions BIGINT NOT NULL DEFAULT 0, last_executed_at DATETIME(3), created_at DATETIME(3) NOT NULL);
+CREATE TABLE automation (id VARCHAR(32) PRIMARY KEY, home_id VARCHAR(32) NOT NULL, name VARCHAR(128) NOT NULL, trigger_rule JSON NOT NULL, scene_id VARCHAR(32) NOT NULL, enabled BOOLEAN NOT NULL, executions BIGINT NOT NULL DEFAULT 0, last_executed_at DATETIME(3), created_at DATETIME(3) NOT NULL);
+CREATE TABLE energy_reading (id VARCHAR(32) PRIMARY KEY, home_id VARCHAR(32) NOT NULL, device_id VARCHAR(32) NOT NULL, cumulative_kwh DECIMAL(16,4) NOT NULL, delta_kwh DECIMAL(16,4) NOT NULL, reported_at DATETIME(3) NOT NULL, INDEX idx_energy_device_time(device_id,reported_at));
+CREATE TABLE home_alarm (id VARCHAR(32) PRIMARY KEY, home_id VARCHAR(32) NOT NULL, device_id VARCHAR(32) NOT NULL, alarm_type VARCHAR(32) NOT NULL, severity VARCHAR(16) NOT NULL, status VARCHAR(24) NOT NULL, occurrences INT NOT NULL, resolution VARCHAR(512), first_seen_at DATETIME(3) NOT NULL, last_seen_at DATETIME(3) NOT NULL, resolved_at DATETIME(3));
+CREATE TABLE command_log (id VARCHAR(32) PRIMARY KEY, device_id VARCHAR(32) NOT NULL, capability VARCHAR(64) NOT NULL, command_value JSON, status VARCHAR(24) NOT NULL, actor VARCHAR(32) NOT NULL, source VARCHAR(64), executed_at DATETIME(3) NOT NULL);
+CREATE TABLE audit_event (id VARCHAR(32) PRIMARY KEY, actor VARCHAR(64) NOT NULL, action VARCHAR(64) NOT NULL, resource_id VARCHAR(64) NOT NULL, detail JSON, occurred_at DATETIME(3) NOT NULL);
