@@ -1,5 +1,7 @@
 # 知华全屋智能与家庭物联网平台
 
+[简体中文](README.md) | [English](README.en.md)
+
 从“单设备遥控”走向“空间、成员、场景和自动化协同”。`zhuatech-smart-home` 是知华科技面向家庭、样板间、精装住宅与养老看护场景推出的社区源码项目。
 
 [知华科技（上海如静知华信息科技有限公司）](https://www.zhuatech.cn/)提供中小企业AI转型、IoT平台、软件外包与定制开发服务。商业咨询微信：`zhuatech` / `zhuatech2`。
